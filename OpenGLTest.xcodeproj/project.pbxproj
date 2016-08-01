@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		74410AD51D4F238600F52B15 /* OpenGLTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		74410AD51D4F238600F52B15 /* FoveaTester.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoveaTester.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74410AD81D4F238600F52B15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74410ADA1D4F238600F52B15 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
 		74410ADC1D4F238600F52B15 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		74410AD61D4F238600F52B15 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				74410AD51D4F238600F52B15 /* OpenGLTest.app */,
+				74410AD51D4F238600F52B15 /* FoveaTester.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -73,9 +73,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		74410AD41D4F238600F52B15 /* OpenGLTest */ = {
+		74410AD41D4F238600F52B15 /* FoveaTester */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 74410AEB1D4F238600F52B15 /* Build configuration list for PBXNativeTarget "OpenGLTest" */;
+			buildConfigurationList = 74410AEB1D4F238600F52B15 /* Build configuration list for PBXNativeTarget "FoveaTester" */;
 			buildPhases = (
 				74410AD11D4F238600F52B15 /* Sources */,
 				74410AD21D4F238600F52B15 /* Frameworks */,
@@ -85,9 +85,9 @@
 			);
 			dependencies = (
 			);
-			name = OpenGLTest;
+			name = FoveaTester;
 			productName = OpenGLTest;
-			productReference = 74410AD51D4F238600F52B15 /* OpenGLTest.app */;
+			productReference = 74410AD51D4F238600F52B15 /* FoveaTester.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -118,7 +118,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				74410AD41D4F238600F52B15 /* OpenGLTest */,
+				74410AD41D4F238600F52B15 /* FoveaTester */,
 			);
 		};
 /* End PBXProject section */
@@ -263,7 +263,7 @@
 				INFOPLIST_FILE = OpenGLTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = de.konrad.opengltest.OpenGLTest;
+				PRODUCT_BUNDLE_IDENTIFIER = de.konrad.foveaTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -272,11 +272,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: mathHeartCode UG(haftungsbeschraenkt) (H43Z4288RY)";
 				INFOPLIST_FILE = OpenGLTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.konrad.opengltest.OpenGLTest;
+				PRODUCT_BUNDLE_IDENTIFIER = de.konrad.foveaTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "470ddffd-23db-470a-9878-3e1ce5cfe1c1";
 			};
 			name = Release;
 		};
@@ -292,7 +293,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		74410AEB1D4F238600F52B15 /* Build configuration list for PBXNativeTarget "OpenGLTest" */ = {
+		74410AEB1D4F238600F52B15 /* Build configuration list for PBXNativeTarget "FoveaTester" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				74410AEC1D4F238600F52B15 /* Debug */,

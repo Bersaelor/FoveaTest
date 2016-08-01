@@ -35,11 +35,15 @@ class GameViewController: GLKViewController {
         }
     }
     
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.context = EAGLContext(API: .OpenGLES2)
-        
+                
         if self.context == nil {
             print("Failed to create ES context")
         }
