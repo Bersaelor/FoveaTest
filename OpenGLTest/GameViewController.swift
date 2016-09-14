@@ -125,7 +125,7 @@ class GameViewController: GLKViewController {
         glUniform2f(uResolution, GLfloat(rect.width * 2.0), GLfloat(rect.height * 2.0));
         glUniform1f(uTime, GLfloat(self.timeSinceFirstResume))
         
-        glDrawArrays(GLenum(GL_TRIANGLES), 0, 36)
+        glDrawArrays(GLenum(GL_TRIANGLES), 0, 6)
     }
     
     // MARK: -  OpenGL ES 2 shader compilation
@@ -221,7 +221,7 @@ class GameViewController: GLKViewController {
                 var logLength: GLint = 0
                 glGetShaderiv(shader, GLenum(GL_INFO_LOG_LENGTH), &logLength)
                 if logLength > 0 {
-                    var log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
+                    let log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
                     glGetShaderInfoLog(shader, logLength, &logLength, log)
                     NSLog("Shader compile log: \n%s", log)
                     free(log)
@@ -283,40 +283,6 @@ class GameViewController: GLKViewController {
 var gCubeVertexData: [GLfloat] = [
     // Data layout for each line below is:
     // positionX, positionY, positionZ,     normalX, normalY, normalZ,
-    1.0, -1.0, -1.0,        1.0, 0.0, 0.0,
-    1.0, 1.0, -1.0,         1.0, 0.0, 0.0,
-    1.0, -1.0, 1.0,         1.0, 0.0, 0.0,
-    1.0, -1.0, 1.0,         1.0, 0.0, 0.0,
-    1.0, 1.0, -1.0,         1.0, 0.0, 0.0,
-    1.0, 1.0, 1.0,          1.0, 0.0, 0.0,
-    
-    1.0, 1.0, -1.0,         0.0, 1.0, 0.0,
-    -1.0, 1.0, -1.0,        0.0, 1.0, 0.0,
-    1.0, 1.0, 1.0,          0.0, 1.0, 0.0,
-    1.0, 1.0, 1.0,          0.0, 1.0, 0.0,
-    -1.0, 1.0, -1.0,        0.0, 1.0, 0.0,
-    -1.0, 1.0, 1.0,         0.0, 1.0, 0.0,
-    
-    -1.0, 1.0, -1.0,        -1.0, 0.0, 0.0,
-    -1.0, -1.0, -1.0,      -1.0, 0.0, 0.0,
-    -1.0, 1.0, 1.0,         -1.0, 0.0, 0.0,
-    -1.0, 1.0, 1.0,         -1.0, 0.0, 0.0,
-    -1.0, -1.0, -1.0,      -1.0, 0.0, 0.0,
-    -1.0, -1.0, 1.0,        -1.0, 0.0, 0.0,
-    
-    -1.0, -1.0, -1.0,      0.0, -1.0, 0.0,
-    1.0, -1.0, -1.0,        0.0, -1.0, 0.0,
-    -1.0, -1.0, 1.0,        0.0, -1.0, 0.0,
-    -1.0, -1.0, 1.0,        0.0, -1.0, 0.0,
-    1.0, -1.0, -1.0,        0.0, -1.0, 0.0,
-    1.0, -1.0, 1.0,         0.0, -1.0, 0.0,
-    
-    1.0, 1.0, 1.0,          0.0, 0.0, 1.0,
-    -1.0, 1.0, 1.0,         0.0, 0.0, 1.0,
-    1.0, -1.0, 1.0,         0.0, 0.0, 1.0,
-    1.0, -1.0, 1.0,         0.0, 0.0, 1.0,
-    -1.0, 1.0, 1.0,         0.0, 0.0, 1.0,
-    -1.0, -1.0, 1.0,        0.0, 0.0, 1.0,
     
     1.0, -1.0, -1.0,        0.0, 0.0, -1.0,
     -1.0, -1.0, -1.0,      0.0, 0.0, -1.0,
