@@ -19,7 +19,6 @@ var uTime: GLint = 0
 class GameViewController: GLKViewController {
     
     var program: GLuint = 0
-    var rotation: Float = 0.0
     
     var vertexArray: GLuint = 0
     var vertexBuffer: GLuint = 0
@@ -74,7 +73,7 @@ class GameViewController: GLKViewController {
     func setupGL() {
         EAGLContext.setCurrent(self.context)
         
-        self.loadShaders()
+        if !self.loadShaders() { print("Failed to load shaders") }
         
         glEnable(GLenum(GL_DEPTH_TEST))
         
@@ -106,10 +105,6 @@ class GameViewController: GLKViewController {
     }
     
     // MARK: - GLKView and GLKViewController delegate methods
-    
-    func update() {
-        rotation += Float(self.timeSinceLastUpdate * 1.0)
-    }
     
     override func glkView(_ view: GLKView, drawIn rect: CGRect) {
         glClearColor(0.65, 0.65, 0.65, 1.0)
