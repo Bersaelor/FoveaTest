@@ -9,9 +9,8 @@
 import GLKit
 import OpenGLES
 
-func BUFFER_OFFSET(i: Int) -> UnsafePointer<Void> {
-    let p: UnsafePointer<Void> = nil
-    return p.advancedBy(i)
+fileprivate func BUFFER_OFFSET(_ i: Int) -> UnsafeRawPointer? {
+    return UnsafeRawPointer(bitPattern: i)
 }
 
 var uResolution: GLint = 0
@@ -30,19 +29,19 @@ class GameViewController: GLKViewController {
     deinit {
         self.tearDownGL()
         
-        if EAGLContext.currentContext() === self.context {
-            EAGLContext.setCurrentContext(nil)
+        if EAGLContext.current() === self.context {
+            EAGLContext.setCurrent(nil)
         }
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.context = EAGLContext(API: .OpenGLES2)
+        self.context = EAGLContext(api: .openGLES2)
                 
         if self.context == nil {
             print("Failed to create ES context")
@@ -50,7 +49,7 @@ class GameViewController: GLKViewController {
         
         let view = self.view as! GLKView
         view.context = self.context!
-        view.drawableDepthFormat = .Format24
+        view.drawableDepthFormat = .format24
 //        view.drawableMultisample = GLKViewDrawableMultisample.Multisample4X
 //        print("drawableMultisample \(view.drawableMultisample.rawValue)")
         
@@ -60,20 +59,20 @@ class GameViewController: GLKViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
-        if self.isViewLoaded() && (self.view.window != nil) {
+        if self.isViewLoaded && (self.view.window != nil) {
             self.view = nil
             
             self.tearDownGL()
             
-            if EAGLContext.currentContext() === self.context {
-                EAGLContext.setCurrentContext(nil)
+            if EAGLContext.current() === self.context {
+                EAGLContext.setCurrent(nil)
             }
             self.context = nil
         }
     }
     
     func setupGL() {
-        EAGLContext.setCurrentContext(self.context)
+        EAGLContext.setCurrent(self.context)
         
         self.loadShaders()
         
@@ -84,18 +83,18 @@ class GameViewController: GLKViewController {
         
         glGenBuffers(1, &vertexBuffer)
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(sizeof(GLfloat) * gCubeVertexData.count), &gCubeVertexData, GLenum(GL_STATIC_DRAW))
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(MemoryLayout<GLfloat>.size * gCubeVertexData.count), &gCubeVertexData, GLenum(GL_STATIC_DRAW))
         
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 24, BUFFER_OFFSET(0))
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 24, BUFFER_OFFSET(12))
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.position.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 24, BUFFER_OFFSET(0))
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.normal.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 24, BUFFER_OFFSET(12))
         
         glBindVertexArrayOES(0)
     }
     
     func tearDownGL() {
-        EAGLContext.setCurrentContext(self.context)
+        EAGLContext.setCurrent(self.context)
         
         glDeleteBuffers(1, &vertexBuffer)
         glDeleteVertexArraysOES(1, &vertexArray)
@@ -112,7 +111,7 @@ class GameViewController: GLKViewController {
         rotation += Float(self.timeSinceLastUpdate * 1.0)
     }
     
-    override func glkView(view: GLKView, drawInRect rect: CGRect) {
+    override func glkView(_ view: GLKView, drawIn rect: CGRect) {
         glClearColor(0.65, 0.65, 0.65, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
         
@@ -140,14 +139,14 @@ class GameViewController: GLKViewController {
         program = glCreateProgram()
         
         // Create and compile vertex shader.
-        vertShaderPathname = NSBundle.mainBundle().pathForResource("Shader", ofType: "vsh")!
+        vertShaderPathname = Bundle.main.path(forResource: "Shader", ofType: "vsh")!
         if self.compileShader(&vertShader, type: GLenum(GL_VERTEX_SHADER), file: vertShaderPathname) == false {
             print("Failed to compile vertex shader")
             return false
         }
         
         // Create and compile fragment shader.
-        fragShaderPathname = NSBundle.mainBundle().pathForResource("Shader", ofType: "fsh")!
+        fragShaderPathname = Bundle.main.path(forResource: "Shader", ofType: "fsh")!
         if !self.compileShader(&fragShader, type: GLenum(GL_FRAGMENT_SHADER), file: fragShaderPathname) {
             print("Failed to compile fragment shader")
             return false
@@ -161,8 +160,8 @@ class GameViewController: GLKViewController {
         
         // Bind attribute locations.
         // This needs to be done prior to linking.
-        glBindAttribLocation(program, GLuint(GLKVertexAttrib.Position.rawValue), "position")
-        glBindAttribLocation(program, GLuint(GLKVertexAttrib.Normal.rawValue), "normal")
+        glBindAttribLocation(program, GLuint(GLKVertexAttrib.position.rawValue), "position")
+        glBindAttribLocation(program, GLuint(GLKVertexAttrib.normal.rawValue), "normal")
         
         // Link program.
         if !self.linkProgram(program) {
@@ -202,16 +201,16 @@ class GameViewController: GLKViewController {
     }
     
     
-    func compileShader(inout shader: GLuint, type: GLenum, file: String) -> Bool {
+    func compileShader(_ shader: inout GLuint, type: GLenum, file: String) -> Bool {
         var status: GLint = 0
         var source: UnsafePointer<Int8>
         do {
-            source = try NSString(contentsOfFile: file, encoding: NSUTF8StringEncoding).UTF8String
+            source = try NSString(contentsOfFile: file, encoding: String.Encoding.utf8.rawValue).utf8String!
         } catch {
             print("Failed to load vertex shader")
             return false
         }
-        var castSource = UnsafePointer<GLchar>(source)
+        var castSource: UnsafePointer<GLchar>? = UnsafePointer<GLchar>(source)
         
         shader = glCreateShader(type)
         glShaderSource(shader, 1, &castSource, nil)
@@ -221,7 +220,7 @@ class GameViewController: GLKViewController {
                 var logLength: GLint = 0
                 glGetShaderiv(shader, GLenum(GL_INFO_LOG_LENGTH), &logLength)
                 if logLength > 0 {
-                    let log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
+                    let log = UnsafeMutablePointer<GLchar>.allocate(capacity: Int(logLength))
                     glGetShaderInfoLog(shader, logLength, &logLength, log)
                     NSLog("Shader compile log: \n%s", log)
                     free(log)
@@ -236,7 +235,7 @@ class GameViewController: GLKViewController {
         return true
     }
     
-    func linkProgram(prog: GLuint) -> Bool {
+    func linkProgram(_ prog: GLuint) -> Bool {
         var status: GLint = 0
         glLinkProgram(prog)
         
@@ -259,14 +258,14 @@ class GameViewController: GLKViewController {
         return true
     }
     
-    func validateProgram(prog: GLuint) -> Bool {
+    func validateProgram(_ prog: GLuint) -> Bool {
         var logLength: GLsizei = 0
         var status: GLint = 0
         
         glValidateProgram(prog)
         glGetProgramiv(prog, GLenum(GL_INFO_LOG_LENGTH), &logLength)
         if logLength > 0 {
-            var log: [GLchar] = [GLchar](count: Int(logLength), repeatedValue: 0)
+            var log: [GLchar] = [GLchar](repeating: 0, count: Int(logLength))
             glGetProgramInfoLog(prog, logLength, &logLength, &log)
             print("Program validate log: \n\(log)")
         }
