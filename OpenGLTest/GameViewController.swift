@@ -111,13 +111,14 @@ class GameViewController: GLKViewController {
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
         
         glBindVertexArrayOES(vertexArray)
-        
+
+        // Uniforms
+        glUniform2f(uResolution, GLfloat(rect.width * 2.0), GLfloat(rect.height * 2.0))
+        glUniform1f(uTime, GLfloat(self.timeSinceFirstResume))
+        print("rendering for uTime: \(self.timeSinceFirstResume)")
+
         // Render the object again with ES2
         glUseProgram(program)
-        
-        // Uniforms
-        glUniform2f(uResolution, GLfloat(rect.width * 2.0), GLfloat(rect.height * 2.0));
-        glUniform1f(uTime, GLfloat(self.timeSinceFirstResume))
         
         glDrawArrays(GLenum(GL_TRIANGLES), 0, 6)
     }
@@ -212,14 +213,15 @@ class GameViewController: GLKViewController {
         glCompileShader(shader)
         
         #if DEBUG
-                var logLength: GLint = 0
-                glGetShaderiv(shader, GLenum(GL_INFO_LOG_LENGTH), &logLength)
-                if logLength > 0 {
-                    let log = UnsafeMutablePointer<GLchar>.allocate(capacity: Int(logLength))
-                    glGetShaderInfoLog(shader, logLength, &logLength, log)
-                    NSLog("Shader compile log: \n%s", log)
-                    free(log)
-                }
+            var logLength: GLint = 0
+            glGetShaderiv(shader, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+            print("glGetShaderiv in compileShader, logLength : \(logLength)")
+            if logLength > 0 {
+                let log = UnsafeMutablePointer<GLchar>.allocate(capacity: Int(logLength))
+                glGetShaderInfoLog(shader, logLength, &logLength, log)
+                NSLog("Shader compile log: \n%s", log)
+                free(log)
+            }
         #endif
         
         glGetShaderiv(shader, GLenum(GL_COMPILE_STATUS), &status)
@@ -234,16 +236,16 @@ class GameViewController: GLKViewController {
         var status: GLint = 0
         glLinkProgram(prog)
         
-        //#if defined(DEBUG)
-        //        var logLength: GLint = 0
-        //        glGetShaderiv(shader, GLenum(GL_INFO_LOG_LENGTH), &logLength)
-        //        if logLength > 0 {
-        //            var log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
-        //            glGetShaderInfoLog(shader, logLength, &logLength, log)
-        //            NSLog("Shader compile log: \n%s", log)
-        //            free(log)
-        //        }
-        //#endif
+        #if DEBUG
+                var logLength: GLint = 0
+                glGetShaderiv(prog, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+                if logLength > 0 {
+                    let log = UnsafeMutablePointer<GLchar>.allocate(capacity: Int(logLength))
+                    glGetShaderInfoLog(prog, logLength, &logLength, log)
+                    NSLog("Shader linking log: \n%s", log)
+                    free(log)
+                }
+        #endif
         
         glGetProgramiv(prog, GLenum(GL_LINK_STATUS), &status)
         if status == 0 {
